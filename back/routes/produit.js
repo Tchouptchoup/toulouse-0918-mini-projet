@@ -42,6 +42,18 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+  const id = req.params.id
+  db.query('SELECT * from product WHERE id=?', [id], (error, result) => {
+    if (error) {
+      return res.sendStatus(500).json({
+        err: error.message
+      });
+    }
+    return res.status(200).json(result[0]);
+  });
+});
+
 router.delete('/suppression/:id', (req, res) => {
   const id = req.params.id;
   db.query('DELETE FROM product WHERE id=?', [id], (error, results) => {
