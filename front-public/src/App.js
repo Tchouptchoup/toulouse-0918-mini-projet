@@ -8,6 +8,7 @@ import { listeProduits } from './actions/produit';
 import { connect } from 'react-redux';
 import { Divider } from 'semantic-ui-react';
 import PageProduit from './components/PageProduit';
+import Footer from './components/Footer';
 
 class App extends Component {
 
@@ -31,6 +32,7 @@ class App extends Component {
           <Route exact path="/" component={ListeProduit} />
           <Route path="/:name/:id" component={PageProduit} />
         </Switch>
+        <Footer />
       </div>
     );
   }
