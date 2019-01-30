@@ -21,7 +21,7 @@ class PageProduit extends Component {
 
   render() {
     const { ajoutPanier } = this.props;
-    const { produit: { brand, name, description, picture, price } } = this.state;
+    const { produit: { brand, name, description, picture, price, stock } } = this.state;
     return (
       <div>
         <Grid style={{ marginTop: '30px', marginBottom: '30px', marginLeft: '50px', marginRight: '50px' }}>
@@ -41,10 +41,15 @@ class PageProduit extends Component {
               </List.Item>
               <List.Item style={{ marginTop: '20px' }}>
                 <b>Description : </b>
-                <p style={{ marginTop: '10px' }}>{description && formatText(description)}</p>
+                <div style={{ marginTop: '10px' }}>{description && formatText(description)}</div>
               </List.Item>
               <List.Item style={{ marginTop: '40px' }}>
-                <Button floated="right" onClick={() => ajoutPanier(this.state.produit)}>Ajouter au panier</Button>
+                {stock > 0
+                  ?
+                  <Button floated="right" onClick={() => ajoutPanier(this.state.produit)}>Ajouter au panier</Button>
+                  :
+                  <p textAlign="right"><b>Ce produit n'est plus en stock.</b></p>
+                }
               </List.Item>
             </List>
           </Grid.Column>
@@ -53,6 +58,7 @@ class PageProduit extends Component {
     );
   }
 }
+
 
 const mapDispatchToProps = {
   ajoutPanier

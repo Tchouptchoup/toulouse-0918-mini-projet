@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Dropdown, Menu, Button, Icon } from 'semantic-ui-react';
+import { Dropdown, Menu, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ajoutPanier, deduitPanier, supprimePanier } from '../actions/panier';
+import { plusPanier, deduitPanier, supprimePanier, openPanier } from '../actions/panier';
+import '../styles/Dropdown.scss';
 
 class Navbar extends Component {
+
   render() {
-    const { panier, ajoutPanier, deduitPanier, supprimePanier } = this.props;
-    console.log(panier)
+    const { panier, plusPanier, deduitPanier, supprimePanier, isOpen, openPanier } = this.props;
     return (
       <div>
         <Menu style={{ borderRadius: '0rem' }} fixed="top">
@@ -21,22 +22,38 @@ class Navbar extends Component {
             </Dropdown.Menu>
           </Dropdown>
           <Menu.Menu position='right'>
-            <Dropdown icon="shopping basket" pointing className='link item' closeOnSelect={false}>
-              <Dropdown.Menu textAlign="center">
+            <Dropdown icon="shopping basket" pointing className='link item CartDropdown' open={isOpen} onClick={openPanier}>
+              <Dropdown.Menu>
                 {panier.length > 0
                   ?
                   panier.map(produit => (
-                    <Dropdown.Item>
+                    <Dropdown.Item key={produit.id}>
                       {produit.name}{' '}
                       <Button style={{ background: "white" }} onClick={() => deduitPanier(produit)}>-</Button>
                       <span>{produit.quantite}</span>
-                      <Button style={{ background: "white" }} onClick={() => ajoutPanier(produit)}>+</Button>
+                      <Button style={{ background: "white" }} onClick={() => plusPanier(produit)}>+</Button>
                       {produit.quantite * produit.price}{' '}€
                       <Button style={{ background: "white" }} icon="close" onClick={() => supprimePanier(produit)}></Button>
                     </Dropdown.Item>
                   ))
                   :
                   <Dropdown.Item>Il n'y a rien dans votre panier</Dropdown.Item>
+                }
+                {panier.length > 0
+                  ?
+                  <Dropdown.Divider />
+                  :
+                  ''
+                }
+                {panier.length > 0
+                  ?
+                  <Link to="/mon-panier" style={{ color: 'black' }}>
+                    <Dropdown.Item style={{ textAlign: 'center' }}>
+                      Voir mon panier
+                    </Dropdown.Item>
+                  </Link>
+                  :
+                  ''
                 }
               </Dropdown.Menu>
             </Dropdown>
@@ -48,11 +65,12 @@ class Navbar extends Component {
 }
 
 const mapStateToProps = state => ({
-  panier: state.panier.panier
+  panier: state.panier.panier,
+  isOpen: state.panier.isOpen
 });
 
 const mapDispatchToProps = {
-  ajoutPanier, deduitPanier, supprimePanier
+  plusPanier, deduitPanier, supprimePanier, openPanier
 }
 
 export default connect(
