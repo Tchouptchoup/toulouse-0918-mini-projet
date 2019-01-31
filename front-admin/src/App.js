@@ -22,7 +22,6 @@ class App extends Component {
     axios.get('api/produit')
       .then(res => {
         const produits = res.data;
-        console.log(res.data)
         listProduct(produits);
       })
       .catch(err => console.error(err));
